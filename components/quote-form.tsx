@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
+import { trackGa4Event } from "@/components/ga4-tracking";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -20,6 +21,7 @@ export function QuoteForm() {
       const response = await fetch("/api/quote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const result = (await response.json()) as { message?: string };
       if (!response.ok) throw new Error(result.message ?? "Unable to send your request.");
+      trackGa4Event("form_submit", { form_name: "cash_offer", page_path: window.location.pathname });
       setState("success");
       setMessage(result.message ?? "Thanks — we’ll call you with an offer shortly.");
       form.reset();

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import favicon from "@/assets/favicons.png";
+import Script from "next/script";
 import logo from "@/assets/junkacar-logo.png";
+import { Ga4Tracking } from "@/components/ga4-tracking";
 import { JsonLd } from "@/components/seo-schema";
 import "./globals.css";
 
@@ -15,9 +16,9 @@ export const metadata: Metadata = {
   publisher: "Junk A Car",
   category: "Automotive",
   icons: {
-    icon: [{ url: favicon.src, type: "image/png" }],
-    shortcut: [{ url: favicon.src, type: "image/png" }],
-    apple: [{ url: favicon.src, type: "image/png" }],
+    icon: [{ url: "/icon.png", sizes: "512x512", type: "image/png" }],
+    shortcut: [{ url: "/icon.png", sizes: "512x512", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   robots: {
     index: true,
@@ -56,5 +57,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     contactPoint: { "@type": "ContactPoint", telephone: "+1-403-688-7307", email: "info@junkacar.ca", contactType: "sales", areaServed: "CA-AB", availableLanguage: "English" },
   };
   const websiteSchema = { "@context": "https://schema.org", "@type": "WebSite", "@id": "https://www.junkacar.ca/#website", url: "https://www.junkacar.ca/", name: "Junk A Car", publisher: { "@id": "https://www.junkacar.ca/#business" }, inLanguage: "en-CA" };
-  return <html lang="en-CA"><body>{children}<JsonLd data={businessSchema} /><JsonLd data={websiteSchema} /></body></html>;
+  return <html lang="en-CA"><body>{children}<Ga4Tracking /><JsonLd data={businessSchema} /><JsonLd data={websiteSchema} /><Script async src="https://www.googletagmanager.com/gtag/js?id=G-F5757MZ9RN" strategy="afterInteractive" /><Script id="google-analytics" strategy="afterInteractive">{`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = gtag;
+gtag('js', new Date());
+gtag('config', 'G-F5757MZ9RN');`}</Script></body></html>;
 }
